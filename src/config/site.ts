@@ -8,7 +8,7 @@ export const siteConfig = {
   shortName: "KDM",
   tagline: "Food made with love",
   slogan: "Pull up. Eat up.",
-  heritage: "Straight from the DR",
+  heritage: "DR’s Finest", // hero badge; KDM's pick
   // TODO(launch): set NEXT_PUBLIC_SITE_URL to the real domain so share cards and the sitemap use it.
   // On Vercel it falls back to the project's production URL; locally, to localhost.
   url:
