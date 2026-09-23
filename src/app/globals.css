@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * KDM Tasty Temptations: brand tokens
+ * Palette pulled from the official logo: ribbon crimson, foil gold,
+ * fire orange, cream, plus the Dominican flag blue/red.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-night: #0e0805;
+  --color-soot: #140c08;
+  --color-char: #20140e;
+  --color-cream: #fbefdb;
+  --color-paper: #f7e8cc;
+  --color-cocoa: #3b2417;
+  --color-gold: #f2c14e;
+  --color-gold-deep: #b27a1c;
+  --color-flame: #ffae3b;
+  --color-ember: #f25a12;
+  --color-ember-deep: #c2410c; /* ember that still passes 3:1 on the cream paper */
+  --color-crimson: #c8102e;
+  --color-crimson-deep: #6f0914;
+  --color-dr-blue: #002d62;
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Fraunces personality axes */
+@utility font-soft {
+  font-variation-settings: "SOFT" 100, "WONK" 0;
+}
+@utility font-wonk {
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+}
+
+/* Foil-gold type, like the KDM lettering on the logo ribbon */
+@utility text-gold-foil {
+  background-image: linear-gradient(172deg, #fff2c4 8%, #ffd46a 38%, #f2b03a 62%, #c07b17 94%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility text-outline-gold {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgb(242 193 78 / 0.35);
+}
+
+@layer base {
+  html {
+    background: var(--color-night);
+    color-scheme: dark;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+  }
+
+  body {
+    background: var(--color-night);
+    color: var(--color-cream);
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-night);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+}
+
+/* Film grain over everything: keeps the dark sections from feeling flat */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Header: transparent over the hero, solid once you scroll ---------- */
+.site-header {
+  background: rgb(14 8 5 / 0.82);
+  backdrop-filter: blur(16px) saturate(140%);
+  border-bottom: 1px solid rgb(251 239 219 / 0.08);
+}
+
+@supports (animation-timeline: scroll()) {
+  .site-header {
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom-color: transparent;
+    animation: header-fill linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 140px;
+  }
+}
+
+@keyframes header-fill {
+  to {
+    background: rgb(14 8 5 / 0.82);
+    backdrop-filter: blur(16px) saturate(140%);
+    border-bottom-color: rgb(251 239 219 / 0.08);
+  }
+}
+
+/* ---------- Cream paper menu with crimped (scalloped) edges ---------- */
+.paper {
+  background-color: var(--color-paper);
+  background-image:
+    radial-gradient(1100px 520px at 8% 0%, rgb(255 255 255 / 0.6), transparent 60%),
+    radial-gradient(900px 600px at 100% 100%, rgb(214 150 70 / 0.2), transparent 60%);
+}
+
+.crimp-edges {
+  --crimp: 28px;
+  --bump: radial-gradient(circle calc(var(--crimp) / 2) at 50% 50%, #000 96%, #0000);
+  -webkit-mask:
+    var(--bump) 50% 0 / var(--crimp) var(--crimp) repeat-x,
+    var(--bump) 50% 100% / var(--crimp) var(--crimp) repeat-x,
+    linear-gradient(#000 0 0) 0 50% / 100% calc(100% - var(--crimp)) no-repeat;
+  mask:
+    var(--bump) 50% 0 / var(--crimp) var(--crimp) repeat-x,
+    var(--bump) 50% 100% / var(--crimp) var(--crimp) repeat-x,
+    linear-gradient(#000 0 0) 0 50% / 100% calc(100% - var(--crimp)) no-repeat;
+}
+
+/* ---------- Motion ---------- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -10px;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+}
+
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.85;
+    scale: 1;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.06;
+  }
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.95;
+  }
+  75% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(var(--drift), -88vh, 0) scale(0.35);
+    opacity: 0;
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(56px);
+  }
+}
+
+.marquee {
+  animation: marquee 48s linear infinite;
+}
+.marquee-reverse {
+  animation-duration: 56s;
+  animation-direction: reverse;
+}
+
+.ember {
+  position: absolute;
+  bottom: -12px;
+  left: var(--x);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 9999px;
+  background: radial-gradient(circle, #ffe3a0 0%, #ff8a2a 45%, transparent 72%);
+  box-shadow: 0 0 12px 2px rgb(255 120 30 / 0.55);
+  opacity: 0;
+  animation: ember-rise var(--d) linear var(--delay) infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .spin-slow {
+    animation: spin 60s linear infinite;
+  }
+  .float-y {
+    animation: float-y 6s ease-in-out infinite;
+  }
+  .hero-rise {
+    animation: rise-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .hero-glow {
+    animation: glow-breathe 7s ease-in-out infinite;
+  }
+
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 55%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee,
+  .ember {
+    animation: none;
+  }
+}
